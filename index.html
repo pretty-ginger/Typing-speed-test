@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Typing Speed Test</title>
+
+  <!-- Display font for the big header (falls back to system-ui if it fails to load) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="stylize.css" />
+</head>
+<body>
+
+  <!-- "app--intro" makes the header big. JS removes it when the test starts. -->
+  <main class="app app--intro" id="app">
+
+    <header class="app__header">
+      <h1 class="app__title">Typing <span class="app__mark">Speed</span> Test</h1>
+
+      <!-- Stats only appear once the test screen is showing -->
+      <div class="stats hidden" id="stats">
+        <div class="stat">
+          <span class="stat__value" id="timeValue">30</span>
+          <span class="stat__label">seconds</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value" id="wpmValue">0</span>
+          <span class="stat__label">WPM</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value" id="accuracyValue">100</span>
+          <span class="stat__label">% accuracy</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ INTRO SCREEN ============ -->
+    <section class="intro" id="introScreen">
+      <p class="intro__tagline">How fast can you type? You get 30 seconds, and the clock starts on your first keystroke.</p>
+
+      <ul class="intro__rules">
+        <li>Case-sensitive</li>
+        <li>No backspace</li>
+        <li>Live WPM + accuracy</li>
+      </ul>
+
+      <div class="intro__actions">
+        <button id="startBtn" class="btn btn--primary btn--lg">Begin Test</button>
+
+        <div class="keycaps" aria-hidden="true">
+          <span class="keycap">W</span>
+          <span class="keycap">P</span>
+          <span class="keycap">M</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TEST SCREEN ============ -->
+    <section class="test hidden" id="testScreen">
+      <p class="caps-warning hidden" id="capsWarning">Caps Lock is on. Typing is case-sensitive, so letters will be marked wrong.</p>
+
+      <!-- JS injects one <span> per character here -->
+      <div class="type-box" id="typeBox" aria-label="Text to type"></div>
+
+      <!-- Hidden input captures keystrokes (also brings up the keyboard on mobile) -->
+      <input type="text" id="hiddenInput" class="hidden-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+
+      <div class="controls">
+        <button id="restartBtn" class="btn">Restart</button>
+      </div>
+
+      <section class="results hidden" id="resultsPanel">
+        <h2>Results</h2>
+        <p class="results__line"><span id="finalWpm">0</span> WPM</p>
+        <p class="results__line"><span id="finalAccuracy">0</span>% accuracy</p>
+        <button id="tryAgainBtn" class="btn btn--primary">Try Again</button>
+      </section>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

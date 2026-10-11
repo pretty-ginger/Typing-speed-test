@@ -1,0 +1,356 @@
+/* ---------- Reset & base ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* page (light, warm) */
+  --page-bg: #f8e7d2;
+  --page-text: #0f1117;
+  --page-accent: #6d4fd8;      /* darker purple so it's readable on the light page */
+
+  /* cards (dark) */
+  --card: #181b24;
+  --card-text: #e5e7eb;
+  --muted: #8b93a7;            /* untyped text: about 5.6:1 contrast on the card */
+  --accent: #a78bfa;           /* purple on dark surfaces and buttons */
+  --accent-deep: #5b3fc4;      /* shadow colour for the 3D button */
+
+  /* typing feedback */
+  --correct: #86efac;
+  --incorrect: #f87171;
+  --incorrect-bg: rgba(248, 113, 113, 0.18);
+
+  --font-display: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;            /* header sits at the TOP of the screen */
+  justify-content: center;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--page-bg);
+  color: var(--page-text);
+  padding: clamp(1.25rem, 5vh, 3.5rem) 0;
+}
+
+.app {
+  width: min(900px, 92vw);
+}
+
+/* ---------- Header ---------- */
+.app__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.app__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;                 /* compact size during the test */
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* "Speed" gets a highlighter-sticker treatment */
+.app__mark {
+  display: inline-block;
+  padding: 0.05em 0.22em 0.1em;
+  background: var(--accent);
+  color: #12101c;
+  border-radius: 0.2em;
+  transform: rotate(-3deg);
+}
+
+/* ---------- BIG header on the intro screen ---------- */
+.app--intro .app__header {
+  margin-bottom: 2rem;
+}
+
+.app--intro .app__title {
+  font-size: clamp(3.25rem, 12vw, 7.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+/* ---------- Stats ---------- */
+.stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat__value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--page-accent);
+}
+
+.stat__label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.65;
+}
+
+/* ---------- Intro screen (no card, sits directly on the page) ---------- */
+.intro__tagline {
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+  line-height: 1.45;
+  max-width: 30ch;
+  margin-bottom: 1.5rem;
+}
+
+.intro__rules {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2.25rem;
+}
+
+.intro__rules li {
+  padding: 0.4rem 1rem;
+  border: 2px solid var(--page-text);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.intro__rules li:nth-child(odd) {
+  transform: rotate(-2deg);
+}
+
+.intro__rules li:nth-child(even) {
+  transform: rotate(1.5deg);
+  background: var(--page-text);
+  color: var(--page-bg);
+}
+
+.intro__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+/* ---------- Decorative keycaps ---------- */
+.keycaps {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.keycap {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  background: #fffaf2;
+  border: 2px solid var(--page-text);
+  border-radius: 0.8rem;
+  box-shadow: 0 5px 0 var(--page-text);
+  font-family: "Courier New", ui-monospace, monospace;
+  font-weight: 800;
+  font-size: 1.3rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.keycap:nth-child(1) { transform: rotate(-6deg); animation-delay: 0s; }
+.keycap:nth-child(2) { transform: rotate(3deg);  animation-delay: 0.4s; }
+.keycap:nth-child(3) { transform: rotate(-3deg); animation-delay: 0.8s; }
+
+@keyframes float {
+  50% {
+    translate: 0 -6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keycap {
+    animation: none;
+  }
+}
+
+/* ---------- Caps Lock warning ---------- */
+.caps-warning {
+  margin-bottom: 0.75rem;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  background: rgba(248, 113, 113, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.5);
+  color: #991b1b;
+  font-size: 0.9rem;
+}
+
+/* ---------- Type box ---------- */
+.type-box {
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: 1.4rem;
+  line-height: 2;
+  letter-spacing: 0.5px;
+  padding: 1.5rem 1.75rem;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--muted);            /* untyped characters */
+  cursor: text;
+  user-select: none;
+}
+
+.type-box span {
+  border-radius: 3px;
+}
+
+.char--correct {
+  color: var(--correct);
+}
+
+.char--incorrect {
+  color: var(--incorrect);
+  background: var(--incorrect-bg);   /* background so wrong SPACES are visible too */
+}
+
+.char--current {
+  color: var(--card-text);
+  border-left: 2px solid var(--accent);
+  margin-left: -2px;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    border-left-color: transparent;
+  }
+}
+
+/* ---------- Hidden input ---------- */
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Controls & buttons ---------- */
+.controls {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  padding: 0.65rem 1.5rem;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 17, 23, 0.3);   /* visible on the light page */
+  background: transparent;
+  color: var(--page-text);
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+  background: rgba(15, 17, 23, 0.07);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--page-accent);
+  outline-offset: 2px;
+}
+
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #12101c;
+  font-weight: 600;
+}
+
+.btn--primary:hover {
+  background: #b9a5fb;
+}
+
+/* Big "keycap" style Begin button: presses down when clicked */
+.btn--lg {
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  font-family: var(--font-display);
+  border: 2px solid var(--page-text);
+  border-radius: 14px;
+  box-shadow: 0 6px 0 var(--page-text);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+}
+
+.btn--lg:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 var(--page-text);
+}
+
+.btn--lg:active {
+  transform: translateY(5px);
+  box-shadow: 0 1px 0 var(--page-text);
+}
+
+/* ---------- Results ---------- */
+.results {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--card-text);            /* own text colour so it's readable on the dark card */
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.results h2 {
+  margin-bottom: 0.75rem;
+}
+
+.results__line {
+  font-size: 1.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.results__line span {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.results .btn {
+  margin-top: 1rem;
+}
+
+/* Keep this near the bottom so it wins over display rules above */
+.hidden {
+  display: none;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 520px) {
+  .type-box {
+    font-size: 1.1rem;
+    padding: 1rem;
+  }
+  .stats {
+    gap: 1rem;
+  }
+  .intro__actions {
+    gap: 1.5rem;
+  }
+}
