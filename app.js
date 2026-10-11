@@ -14,6 +14,7 @@ const startBtn = document.getElementById("startBtn");
 const capsWarning = document.getElementById("capsWarning");
 
 const typeBox = document.getElementById("typeBox");
+const typeCard = document.getElementById("typeCard");
 const hiddenInput = document.getElementById("hiddenInput");
 const timeValue = document.getElementById("timeValue");
 const wpmValue = document.getElementById("wpmValue");
@@ -65,9 +66,10 @@ function loadNewPassage() {
 
     hiddenInput.disabled = false;   // must be enabled BEFORE focus()
     hiddenInput.value = "";
-    hiddenInput.focus();
+    hiddenInput.focus({ preventScroll: true });   // don't let the page jump when the keyboard opens
 
     renderText();
+    typeBox.scrollTo({ top: 0, behavior: "instant" });   // back to the first line, no animation
 }
 
 function renderText() {
@@ -80,6 +82,18 @@ function renderText() {
         }
         typeBox.appendChild(span);
     });
+}
+
+// Keeps the line you're typing on as the 2nd visible line of the 4-line window.
+function scrollToCurrentLine() {
+    const current = typeBox.children[currentIndex];
+    if (!current) return;
+
+    const style = getComputedStyle(typeBox);
+    const lineHeight = parseFloat(style.lineHeight) || parseFloat(style.fontSize) * 2;
+    const row = Math.floor(current.offsetTop / lineHeight);   // which line we're on (0 = first)
+
+    typeBox.scrollTop = Math.max(0, (row - 1) * lineHeight);
 }
 
 // ---------- Core typing logic ----------
@@ -120,6 +134,7 @@ function handleInput(e) {
 
     if (currentIndex < currentText.length) {
         spans[currentIndex].classList.add("char--current");
+        scrollToCurrentLine();
         updateStats();
     } else {
         endTest();   // finished the whole passage
@@ -143,7 +158,6 @@ function startTimer() {
 function calculateWPM() {
     if (!startTime) return 0;
 
-    // Minimum of 1 second so the first keystrokes don't produce a silly huge WPM
     const secondsElapsed = Math.max((Date.now() - startTime) / 1000, 1);
     const minutesElapsed = secondsElapsed / 60;
     const correctChars = currentIndex - errors;
@@ -152,7 +166,7 @@ function calculateWPM() {
 }
 
 function calculateAccuracy() {
-    if (currentIndex === 0) return 100;   // nothing typed yet, avoid dividing by zero
+    if (currentIndex === 0) return 100;  
     return Math.round(((currentIndex - errors) / currentIndex) * 100);
 }
 
@@ -162,7 +176,7 @@ function updateStats() {
 }
 
 function endTest() {
-    if (!isRunning) return;   // guards against being called twice
+    if (!isRunning) return;  
 
     clearInterval(timerInterval);
     isRunning = false;
@@ -172,10 +186,10 @@ function endTest() {
     finalWpm.textContent = calculateWPM();
     finalAccuracy.textContent = calculateAccuracy();
     resultsPanel.classList.remove("hidden");
+    resultsPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-// ---------- Caps Lock warning ----------
-// keydown/keyup events can report modifier keys; "input" events can't.
+
 function checkCapsLock(e) {
     if (e.getModifierState) {
         capsWarning.classList.toggle("hidden", !e.getModifierState("CapsLock"));
@@ -187,8 +201,7 @@ startBtn.addEventListener("click", showTestScreen);
 hiddenInput.addEventListener("input", handleInput);
 hiddenInput.addEventListener("keydown", checkCapsLock);
 hiddenInput.addEventListener("keyup", checkCapsLock);
-typeBox.addEventListener("click", () => hiddenInput.focus());
+typeCard.addEventListener("click", () => hiddenInput.focus({ preventScroll: true }));
 restartBtn.addEventListener("click", loadNewPassage);
 tryAgainBtn.addEventListener("click", loadNewPassage);
 
-// No init call: the intro screen shows first, and Begin Test loads the first passage.

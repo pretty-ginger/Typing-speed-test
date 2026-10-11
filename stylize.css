@@ -195,17 +195,27 @@ body {
 }
 
 /* ---------- Type box ---------- */
-.type-box {
-  font-family: "Courier New", ui-monospace, monospace;
-  font-size: 1.4rem;
-  line-height: 2;
-  letter-spacing: 0.5px;
+/* The card holds the padding and background... */
+.type-card {
   padding: 1.5rem 1.75rem;
   border-radius: 14px;
   background: var(--card);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  color: var(--muted);            /* untyped characters */
   cursor: text;
+}
+
+/* ...and the box inside is a fixed 4-line window that JS scrolls line by line,
+   so the line you're typing is always visible above the phone keyboard. */
+.type-box {
+  position: relative;               /* so span.offsetTop is measured from this box */
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: 1.4rem;
+  line-height: 2;
+  letter-spacing: 0.5px;
+  max-height: 8em;                  /* 4 lines x line-height 2em */
+  overflow: hidden;
+  scroll-behavior: smooth;
+  color: var(--muted);              /* untyped characters */
   user-select: none;
 }
 
@@ -236,10 +246,17 @@ body {
 }
 
 /* ---------- Hidden input ---------- */
+/* Fixed at the top of the screen so mobile browsers never scroll the page to
+   "reveal" it when the keyboard opens. 16px stops iOS zooming in on focus. */
 .hidden-input {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
   opacity: 0;
   pointer-events: none;
+  font-size: 16px;
 }
 
 /* ---------- Controls & buttons ---------- */
@@ -343,9 +360,11 @@ body {
 
 /* ---------- Small screens ---------- */
 @media (max-width: 520px) {
+  .type-card {
+    padding: 1rem;
+  }
   .type-box {
     font-size: 1.1rem;
-    padding: 1rem;
   }
   .stats {
     gap: 1rem;

@@ -63,7 +63,9 @@
       <p class="caps-warning hidden" id="capsWarning">Caps Lock is on. Typing is case-sensitive, so letters will be marked wrong.</p>
 
       <!-- JS injects one <span> per character here -->
-      <div class="type-box" id="typeBox" aria-label="Text to type"></div>
+      <div class="type-card" id="typeCard">
+        <div class="type-box" id="typeBox" aria-label="Text to type"></div>
+      </div>
 
       <!-- Hidden input captures keystrokes (also brings up the keyboard on mobile) -->
       <input type="text" id="hiddenInput" class="hidden-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
